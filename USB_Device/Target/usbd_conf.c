@@ -68,7 +68,6 @@ extern void SystemClock_Config(void);
 
 void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
   if(pcdHandle->Instance==USB_DRD_FS)
   {
@@ -84,17 +83,6 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle)
     {
       Error_Handler();
     }
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**USB_DRD_FS GPIO Configuration
-    PA4     ------> USB_NOE
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_4;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    GPIO_InitStruct.Alternate = GPIO_AF2_USB;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     /* Peripheral clock enable */
     __HAL_RCC_USB_CLK_ENABLE();
@@ -129,11 +117,6 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* pcdHandle)
   /* USER CODE END USB_DRD_FS_MspDeInit 0 */
     /* Disable Peripheral clock */
     __HAL_RCC_USB_CLK_DISABLE();
-
-    /**USB_DRD_FS GPIO Configuration
-    PA4     ------> USB_NOE
-    */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4);
 
     /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(USB_UCPD1_2_IRQn);

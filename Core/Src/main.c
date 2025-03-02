@@ -44,7 +44,7 @@
 TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
-
+int button_pressed = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,6 +93,14 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  const uint32_t timer_arr = __HAL_TIM_GET_AUTORELOAD(&htim2);
+
+  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr / 4);
+
+  if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK) {
+    Error_Handler();
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -102,6 +110,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+    if (button_pressed) {
+      button_pressed = 0;
+      // Blink LED
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr);
+      HAL_Delay(1000);
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr / 4);
+    }
   }
   /* USER CODE END 3 */
 }
@@ -168,7 +184,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
+  htim2.Init.Period = 16384;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
@@ -213,8 +229,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : SW1_IN_Pin */
   GPIO_InitStruct.Pin = SW1_IN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(SW1_IN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : JP1_IN_Pin JP2_IN_Pin */
@@ -233,6 +249,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin) {
+  if (GPIO_Pin == SW1_IN_Pin) {
+    button_pressed = 1;
+  }
+}
 
 /* USER CODE END 4 */
 
