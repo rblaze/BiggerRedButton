@@ -110,7 +110,13 @@ int main(void)
 
   const uint32_t timer_arr = __HAL_TIM_GET_AUTORELOAD(&htim2);
 
-  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr / 4);
+  // Default brightness is 2%
+  const uint32_t inactive_brightness = timer_arr / 50;
+  // Blink from 10% to 100%
+  const uint32_t blink_low_brightness = timer_arr / 10;
+  const uint32_t blink_high_brightness = timer_arr;
+
+  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, inactive_brightness);
 
   if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK) {
     Error_Handler();
@@ -141,10 +147,23 @@ int main(void)
       USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&keyboardInputReport,
                           sizeof(keyboardInputReport));
 
-      // Blink LED
-      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr);
-      HAL_Delay(1000);
-      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr / 4);
+      // Blink LED 3 times high to low brightness
+      const uint32_t num_steps = 100;
+
+      for (int blink = 0; blink < 3; blink++) {
+        for (uint32_t i = 0; i < num_steps; i++) {
+          uint32_t brightness =
+              blink_high_brightness -
+              (blink_high_brightness - blink_low_brightness) * i / num_steps;
+
+          __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, brightness);
+
+          // One blink time is 0.5 second
+          HAL_Delay(500 / num_steps);
+        }
+      }
+
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, inactive_brightness);
     }
   }
   /* USER CODE END 3 */
