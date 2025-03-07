@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usbd_hid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +45,21 @@ TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
 int button_pressed = 0;
+
+extern USBD_HandleTypeDef hUsbDeviceFS;
+
+typedef struct {
+  uint8_t MODIFIER;
+  uint8_t RESERVED;
+  uint8_t KEYCODE1;
+  uint8_t KEYCODE2;
+  uint8_t KEYCODE3;
+  uint8_t KEYCODE4;
+  uint8_t KEYCODE5;
+  uint8_t KEYCODE6;
+} KeyboardInputReport;
+
+KeyboardInputReport keyboardInputReport = {0, 0, 0, 0, 0, 0, 0, 0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,8 +126,21 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+
+    // Some event occured.
+    // Button interrupt handler will set the flag.
     if (button_pressed) {
       button_pressed = 0;
+
+      // Send keyboard report
+      keyboardInputReport.KEYCODE1 = 0x28;  // Press Enter
+      USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&keyboardInputReport,
+                          sizeof(keyboardInputReport));
+      HAL_Delay(50);  // Hold Enter key for 50 milliseconds
+      keyboardInputReport.KEYCODE1 = 0x00;  // Release key
+      USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t *)&keyboardInputReport,
+                          sizeof(keyboardInputReport));
+
       // Blink LED
       __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, timer_arr);
       HAL_Delay(1000);
