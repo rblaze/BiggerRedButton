@@ -3,7 +3,9 @@
 /CMakeFiles/
 /Drivers/
 /Middlewares/
+/.settings/
 /.vscode/
+.clangd
 CMakeLists.txt.user
 CMakeLists.txt
 CMakeCache.txt
