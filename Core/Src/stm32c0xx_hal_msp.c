@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file         stm32g0xx_hal_msp.c
+  * @file         stm32c0xx_hal_msp.c
   * @brief        This file provides code for the MSP Initialization
   *               and de-Initialization codes.
   ******************************************************************************
@@ -74,24 +74,20 @@ void HAL_MspInit(void)
 
   /* System interrupt init*/
 
-  /** Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral
-  */
-  HAL_SYSCFG_StrobeDBattpinsConfig(SYSCFG_CFGR1_UCPD1_STROBE);
-
   /* USER CODE BEGIN MspInit 1 */
 
   /* USER CODE END MspInit 1 */
 }
 
 /**
-  * @brief TIM_PWM MSP Initialization
+  * @brief TIM_Base MSP Initialization
   * This function configures the hardware resources used in this example
-  * @param htim_pwm: TIM_PWM handle pointer
+  * @param htim_base: TIM_Base handle pointer
   * @retval None
   */
-void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_pwm)
+void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 {
-  if(htim_pwm->Instance==TIM2)
+  if(htim_base->Instance==TIM2)
   {
     /* USER CODE BEGIN TIM2_MspInit 0 */
 
@@ -117,13 +113,13 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**TIM2 GPIO Configuration
-    PA0     ------> TIM2_CH1
+    PA3     ------> TIM2_CH4
     */
     GPIO_InitStruct.Pin = LED_PWM_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;
+    GPIO_InitStruct.Alternate = GPIO_AF3_TIM2;
     HAL_GPIO_Init(LED_PWM_GPIO_Port, &GPIO_InitStruct);
 
     /* USER CODE BEGIN TIM2_MspPostInit 1 */
@@ -133,14 +129,14 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
 
 }
 /**
-  * @brief TIM_PWM MSP De-Initialization
+  * @brief TIM_Base MSP De-Initialization
   * This function freeze the hardware resources used in this example
-  * @param htim_pwm: TIM_PWM handle pointer
+  * @param htim_base: TIM_Base handle pointer
   * @retval None
   */
-void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* htim_pwm)
+void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 {
-  if(htim_pwm->Instance==TIM2)
+  if(htim_base->Instance==TIM2)
   {
     /* USER CODE BEGIN TIM2_MspDeInit 0 */
 
@@ -150,6 +146,68 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* htim_pwm)
     /* USER CODE BEGIN TIM2_MspDeInit 1 */
 
     /* USER CODE END TIM2_MspDeInit 1 */
+  }
+
+}
+
+/**
+  * @brief PCD MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param hpcd: PCD handle pointer
+  * @retval None
+  */
+void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
+{
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+  if(hpcd->Instance==USB_DRD_FS)
+  {
+    /* USER CODE BEGIN USB_DRD_FS_MspInit 0 */
+
+    /* USER CODE END USB_DRD_FS_MspInit 0 */
+
+  /** Initializes the peripherals clocks
+  */
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
+    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    /* Peripheral clock enable */
+    __HAL_RCC_USB_CLK_ENABLE();
+    /* USB_DRD_FS interrupt Init */
+    HAL_NVIC_SetPriority(USB_DRD_FS_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(USB_DRD_FS_IRQn);
+    /* USER CODE BEGIN USB_DRD_FS_MspInit 1 */
+
+    /* USER CODE END USB_DRD_FS_MspInit 1 */
+
+  }
+
+}
+
+/**
+  * @brief PCD MSP De-Initialization
+  * This function freeze the hardware resources used in this example
+  * @param hpcd: PCD handle pointer
+  * @retval None
+  */
+void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
+{
+  if(hpcd->Instance==USB_DRD_FS)
+  {
+    /* USER CODE BEGIN USB_DRD_FS_MspDeInit 0 */
+
+    /* USER CODE END USB_DRD_FS_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_USB_CLK_DISABLE();
+
+    /* USB_DRD_FS interrupt DeInit */
+    HAL_NVIC_DisableIRQ(USB_DRD_FS_IRQn);
+    /* USER CODE BEGIN USB_DRD_FS_MspDeInit 1 */
+
+    /* USER CODE END USB_DRD_FS_MspDeInit 1 */
   }
 
 }

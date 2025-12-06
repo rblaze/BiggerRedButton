@@ -1,13 +1,13 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
+  * @file    ux_device_keyboard.h
+  * @author  MCD Application Team
+  * @brief   USBX Device HID Keyboard applicative header file
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2025 STMicroelectronics.
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,17 +17,17 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef __UX_DEVICE_KEYBOARD_H__
+#define __UX_DEVICE_KEYBOARD_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32c0xx_hal.h"
+#include "ux_api.h"
+#include "ux_device_class_hid.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,32 +49,28 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+VOID USBD_HID_Keyboard_Activate(VOID *hid_instance);
+VOID USBD_HID_Keyboard_Deactivate(VOID *hid_instance);
+UINT USBD_HID_Keyboard_SetReport(UX_SLAVE_CLASS_HID *hid_instance,
+                                 UX_SLAVE_CLASS_HID_EVENT *hid_event);
+UINT USBD_HID_Keyboard_GetReport(UX_SLAVE_CLASS_HID *hid_instance,
+                                 UX_SLAVE_CLASS_HID_EVENT *hid_event);
 
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BTN_IN_Pin GPIO_PIN_0
-#define BTN_IN_GPIO_Port GPIOA
-#define BTN_IN_EXTI_IRQn EXTI0_1_IRQn
-#define JP1_IN_Pin GPIO_PIN_1
-#define JP1_IN_GPIO_Port GPIOA
-#define JP2_IN_Pin GPIO_PIN_2
-#define JP2_IN_GPIO_Port GPIOA
-#define LED_PWM_Pin GPIO_PIN_3
-#define LED_PWM_GPIO_Port GPIOA
+/* USER CODE BEGIN PD */
 
-/* USER CODE BEGIN Private defines */
+/* USER CODE END PD */
 
-/* USER CODE END Private defines */
+/* USER CODE BEGIN 1 */
+extern UX_SLAVE_CLASS_HID *keyboard_instance;
+/* USER CODE END 1 */
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __MAIN_H */
+#endif  /* __UX_DEVICE_KEYBOARD_H__ */

@@ -1,10 +1,11 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    stm32g0xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @file    app_usbx_device.h
+  * @author  MCD Application Team
+  * @brief   USBX Device applicative header file
   ******************************************************************************
-  * @attention
+   * @attention
   *
   * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
@@ -16,15 +17,19 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32G0xx_IT_H
-#define __STM32G0xx_IT_H
+#ifndef __APP_USBX_DEVICE_H__
+#define __APP_USBX_DEVICE_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
+#include "ux_api.h"
+#include "ux_device_keyboard.h"
+#include "ux_device_descriptors.h"
+#include "ux_dcd_stm32.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -36,6 +41,9 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
+#define UX_DEVICE_APP_MEM_POOL_SIZE         1024
+#define USBX_DEVICE_MEMORY_STACK_SIZE       512
+
 /* USER CODE BEGIN EC */
 
 /* USER CODE END EC */
@@ -46,19 +54,22 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void SVC_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
-void EXTI2_3_IRQHandler(void);
-void USB_UCPD1_2_IRQHandler(void);
+UINT MX_USBX_Device_Init(VOID);
+
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
+/* Private defines -----------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* USER CODE BEGIN 1 */
+
+/* USER CODE END 1 */
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __STM32G0xx_IT_H */
+#endif /* __APP_USBX_DEVICE_H__ */

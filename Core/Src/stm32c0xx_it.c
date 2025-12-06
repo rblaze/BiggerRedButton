@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    stm32g0xx_it.c
+  * @file    stm32c0xx_it.c
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   * @attention
@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "stm32g0xx_it.h"
+#include "stm32c0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -61,7 +61,7 @@ extern PCD_HandleTypeDef hpcd_USB_DRD_FS;
 /* USER CODE END EV */
 
 /******************************************************************************/
-/*           Cortex-M0+ Processor Interruption and Exception Handlers          */
+/*           Cortex Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
   * @brief This function handles Non maskable interrupt.
@@ -98,12 +98,12 @@ void HardFault_Handler(void)
   */
 void SVC_Handler(void)
 {
-  /* USER CODE BEGIN SVC_IRQn 0 */
+  /* USER CODE BEGIN SVCall_IRQn 0 */
 
-  /* USER CODE END SVC_IRQn 0 */
-  /* USER CODE BEGIN SVC_IRQn 1 */
+  /* USER CODE END SVCall_IRQn 0 */
+  /* USER CODE BEGIN SVCall_IRQn 1 */
 
-  /* USER CODE END SVC_IRQn 1 */
+  /* USER CODE END SVCall_IRQn 1 */
 }
 
 /**
@@ -134,38 +134,38 @@ void SysTick_Handler(void)
 }
 
 /******************************************************************************/
-/* STM32G0xx Peripheral Interrupt Handlers                                    */
+/* STM32C0xx Peripheral Interrupt Handlers                                    */
 /* Add here the Interrupt Handlers for the used peripherals.                  */
 /* For the available peripheral interrupt handler names,                      */
-/* please refer to the startup file (startup_stm32g0xx.s).                    */
+/* please refer to the startup file (startup_stm32c0xx.s).                    */
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI line 2 and line 3 interrupts.
+  * @brief This function handles EXTI line 0 and line 1 interrupts.
   */
-void EXTI2_3_IRQHandler(void)
+void EXTI0_1_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI2_3_IRQn 0 */
+  /* USER CODE BEGIN EXTI0_1_IRQn 0 */
 
-  /* USER CODE END EXTI2_3_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(SW1_IN_Pin);
-  /* USER CODE BEGIN EXTI2_3_IRQn 1 */
+  /* USER CODE END EXTI0_1_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(BTN_IN_Pin);
+  /* USER CODE BEGIN EXTI0_1_IRQn 1 */
 
-  /* USER CODE END EXTI2_3_IRQn 1 */
+  /* USER CODE END EXTI0_1_IRQn 1 */
 }
 
 /**
-  * @brief This function handles USB, UCPD1 and UCPD2 global interrupts.
+  * @brief This function handles USB global interrupt (combined with EXTI 33).
   */
-void USB_UCPD1_2_IRQHandler(void)
+void USB_DRD_FS_IRQHandler(void)
 {
-  /* USER CODE BEGIN USB_UCPD1_2_IRQn 0 */
+  /* USER CODE BEGIN USB_DRD_FS_IRQn 0 */
 
-  /* USER CODE END USB_UCPD1_2_IRQn 0 */
+  /* USER CODE END USB_DRD_FS_IRQn 0 */
   HAL_PCD_IRQHandler(&hpcd_USB_DRD_FS);
-  /* USER CODE BEGIN USB_UCPD1_2_IRQn 1 */
+  /* USER CODE BEGIN USB_DRD_FS_IRQn 1 */
 
-  /* USER CODE END USB_UCPD1_2_IRQn 1 */
+  /* USER CODE END USB_DRD_FS_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

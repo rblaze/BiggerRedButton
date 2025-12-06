@@ -17,6 +17,5 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 build.ninja
-stm32g0b1kbtx_flash.ld
-STM32G0B1XX_FLASH.ld
-startup_stm32g0b1xx.s
+stm32c071xx_flash.ld
+startup_stm32c071xx.s
