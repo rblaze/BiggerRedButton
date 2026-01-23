@@ -22,6 +22,8 @@
 #include "stm32c0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "ux_api.h"
+#include "ux_device_stack.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -164,7 +166,7 @@ void USB_DRD_FS_IRQHandler(void)
   /* USER CODE END USB_DRD_FS_IRQn 0 */
   HAL_PCD_IRQHandler(&hpcd_USB_DRD_FS);
   /* USER CODE BEGIN USB_DRD_FS_IRQn 1 */
-
+  _ux_device_stack_tasks_run();
   /* USER CODE END USB_DRD_FS_IRQn 1 */
 }
 

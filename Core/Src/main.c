@@ -130,8 +130,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-    USBX_Device_Process();
+    HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 
     // Some event occured.
     // Button interrupt handler will set the flag.
@@ -157,8 +156,6 @@ int main(void)
         num_blinks = 10;
         blink_time_ms = 200;
       }
-
-      continue;
 
       // Blink LED high to low brightness
       const uint32_t num_blink_steps = 100;

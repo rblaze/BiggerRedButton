@@ -326,8 +326,4 @@ static void USBX_APP_Device_Init(void)
   /* USER CODE END USB_Device_Init_PostTreatment */
 }
 
-void USBX_Device_Process() {
-  ux_device_stack_tasks_run();
-}
-
 /* USER CODE END 1 */
