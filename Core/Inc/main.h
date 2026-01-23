@@ -55,7 +55,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+extern PCD_HandleTypeDef hpcd_USB_DRD_FS;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

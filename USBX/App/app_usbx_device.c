@@ -23,7 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "ux_api.h"
+#include "main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,7 +63,7 @@ static UX_SLAVE_CLASS_HID_PARAMETER hid_keyboard_parameter;
 /* Private function prototypes -----------------------------------------------*/
 static UINT USBD_ChangeFunction(ULONG Device_State);
 /* USER CODE BEGIN PFP */
-
+static void USBX_APP_Device_Init();
 /* USER CODE END PFP */
 
 /**
@@ -73,7 +74,7 @@ static UINT USBD_ChangeFunction(ULONG Device_State);
 
 UINT MX_USBX_Device_Init(VOID)
 {
-  UINT ret = UX_SUCCESS;
+   UINT ret = UX_SUCCESS;
   UCHAR *device_framework_high_speed;
   UCHAR *device_framework_full_speed;
   ULONG device_framework_hs_length;
@@ -160,7 +161,7 @@ UINT MX_USBX_Device_Init(VOID)
   }
 
   /* USER CODE BEGIN MX_USBX_Device_Init1 */
-
+  USBX_APP_Device_Init();
   /* USER CODE END MX_USBX_Device_Init1 */
 
   return ret;
@@ -208,7 +209,7 @@ ULONG _ux_utility_time_get(VOID)
   ULONG time_tick = 0U;
 
   /* USER CODE BEGIN _ux_utility_time_get */
-
+  time_tick = HAL_GetTick();
   /* USER CODE END _ux_utility_time_get */
 
   return time_tick;
@@ -303,5 +304,30 @@ static UINT USBD_ChangeFunction(ULONG Device_State)
   return status;
 }
 /* USER CODE BEGIN 1 */
+
+static void USBX_APP_Device_Init(void)
+{
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x00, PCD_SNG_BUF, 0x0C);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x4C);
+  HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF, 0x8C);
+
+  /* Initialize the device controller driver*/
+  UINT err = ux_dcd_stm32_initialize((ULONG)USB_DRD_FS, (ULONG)&hpcd_USB_DRD_FS);
+  if (err != UX_SUCCESS)
+  {
+    Error_Handler();
+  }
+
+  /* Start the USB device */
+  HAL_PCD_Start(&hpcd_USB_DRD_FS);
+
+  /* USER CODE BEGIN USB_Device_Init_PostTreatment */
+
+  /* USER CODE END USB_Device_Init_PostTreatment */
+}
+
+void USBX_Device_Process() {
+  ux_device_stack_tasks_run();
+}
 
 /* USER CODE END 1 */
