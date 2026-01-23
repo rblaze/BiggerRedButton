@@ -113,14 +113,14 @@ int main(void)
   }
 
   UX_SLAVE_DEVICE *device;
-  UX_SLAVE_CLASS_HID_EVENT hid_event;
-
   device = &_ux_system_slave->ux_system_slave_device;
+
+  UX_SLAVE_CLASS_HID_EVENT hid_event;
   ux_utility_memory_set(&hid_event, 0, sizeof(UX_SLAVE_CLASS_HID_EVENT));
+
   // Report size is 8 bytes: modifier, reserved, and 6 keycode bytes.
   hid_event.ux_device_class_hid_event_length = 8;
   const size_t keycode_offset = 2;
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -132,8 +132,6 @@ int main(void)
     /* USER CODE BEGIN 3 */
     // HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
     USBX_Device_Process();
-
-    continue;
 
     // Some event occured.
     // Button interrupt handler will set the flag.
@@ -152,13 +150,15 @@ int main(void)
         HAL_Delay(50);
 
         // Release Enter key
-        hid_event.ux_device_class_hid_event_buffer[keycode_offset] = 0x28;
+        hid_event.ux_device_class_hid_event_buffer[keycode_offset] = 0;
         ux_device_class_hid_event_set(keyboard_instance, &hid_event);
       } else {
         // Report USB error by 10 fast blinks
         num_blinks = 10;
         blink_time_ms = 200;
       }
+
+      continue;
 
       // Blink LED high to low brightness
       const uint32_t num_blink_steps = 100;

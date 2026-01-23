@@ -277,9 +277,9 @@ uint16_t USBD_HID_ReportDesc_length(uint8_t hid_type);
 #define USBD_STRING_FRAMEWORK_MAX_LENGTH              256U
 
 /* Device HID Keyboard */
-#define USBD_HID_KEYBOARD_EPIN_ADDR                   0x82U
-#define USBD_HID_KEYBOARD_EPIN_FS_MPS                 4U
-#define USBD_HID_KEYBOARD_EPIN_HS_MPS                 4U
+#define USBD_HID_KEYBOARD_EPIN_ADDR                   0x81U
+#define USBD_HID_KEYBOARD_EPIN_FS_MPS                 8U
+#define USBD_HID_KEYBOARD_EPIN_HS_MPS                 8U
 #define USBD_HID_KEYBOARD_EPIN_FS_BINTERVAL           5U
 #define USBD_HID_KEYBOARD_EPIN_HS_BINTERVAL           5U
 
