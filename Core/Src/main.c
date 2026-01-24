@@ -166,13 +166,13 @@ int main(void)
               blink_high_brightness -
               (blink_high_brightness - blink_low_brightness) * i / num_blink_steps;
 
-          __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, brightness);
+          __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, brightness);
 
           HAL_Delay(blink_time_ms / num_blink_steps);
         }
       }
 
-      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, inactive_brightness);
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, inactive_brightness);
     }
   }
   /* USER CODE END 3 */
